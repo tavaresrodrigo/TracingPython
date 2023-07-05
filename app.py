@@ -1,18 +1,10 @@
 from flask import Flask, jsonify, request
-from opentelemetry import trace
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
+import random
+import time
 
 # Create Flask application
 app = Flask(__name__)
-
-# Initialize OpenTelemetry components
-trace.set_tracer_provider(TracerProvider())
-jaeger_exporter = JaegerExporter(service_name="backend-python")
-span_processor = BatchSpanProcessor(jaeger_exporter)
-trace.get_tracer_provider().add_span_processor(span_processor)
 
 # Instrument Flask application
 FlaskInstrumentor().instrument_app(app)
@@ -20,10 +12,18 @@ FlaskInstrumentor().instrument_app(app)
 # Define routes
 @app.route('/')
 def hello():
-    return jsonify({'message': 'Hello, World!'})
+    processing_time = random.randint(1, 3)
+    time.sleep(processing_time)
+    return jsonify({'message': 'Hello, World!', 'Processing time in seconds': processing_time})
 
 @app.route('/data', methods=['POST'])
 def process_data():
     data = request.get_json()
+    #sleeping random time to simulate processing time
+    processing_time = random.randint(1, 3)
+    time.sleep(processing_time)
     # Process the data
-    return jsonify({'message': 'Data processed successfully'})
+    return jsonify({'message': 'Data processed successfully', 'data': data, 'Processing time in seconds': processing_time})
+
+if __name__ == '__main__':
+    app.run()
