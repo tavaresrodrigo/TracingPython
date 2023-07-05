@@ -26,4 +26,4 @@ def process_data():
     return jsonify({'message': 'Data processed successfully', 'data': data, 'Processing time in seconds': processing_time})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=8080)
