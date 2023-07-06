@@ -1,2 +1,6 @@
-flask
-opentelemetry-instrumentation-flask
+fastapi
+uvicorn
+pydantic
+opentelemetry-distro
+opentelemetry-exporter-otlp-proto-grpc
+opentelemetry-instrumentation-fastapi
